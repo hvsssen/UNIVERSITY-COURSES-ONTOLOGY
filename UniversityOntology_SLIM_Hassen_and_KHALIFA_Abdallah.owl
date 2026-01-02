@@ -6,44 +6,12 @@
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
-     xmlns:swrla="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#"
+     xmlns:swrl="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#"
      xmlns:swrlb="http://www.w3.org/2003/11/swrlb#">
-    <owl:Ontology rdf:about="http://www.semanticweb.org/university/ontology"/>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Annotation properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled -->
-
-    <owl:AnnotationProperty rdf:about="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Datatypes
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- xsd:decimal -->
-
-    <rdfs:Datatype rdf:about="xsd:decimal"/>
+    <owl:Ontology rdf:about="http://www.semanticweb.org/university/ontology">
+        <rdfs:comment xml:lang="en">Complete university courses ontology with inference capabilities. Created by Slim Hassen and Khalifa Abdallah.</rdfs:comment>
+        <rdfs:label xml:lang="en">University Courses Ontology</rdfs:label>
+    </owl:Ontology>
     
 
 
@@ -60,35 +28,48 @@
 
     <!-- http://www.semanticweb.org/university/ontology#belongsToDepartment -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#belongsToDepartment"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#belongsToDepartment">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Department"/>
+        <rdfs:comment xml:lang="en">Department offering this course</rdfs:comment>
+        <rdfs:label xml:lang="en">belongs to department</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#canEnrollIn -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#canEnrollIn"/>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#enrolledIn -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#enrolledIn"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#canEnrollIn">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Student"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:comment xml:lang="en">Course student is eligible to enroll in (inferred by SWRL rule)</rdfs:comment>
+        <rdfs:label xml:lang="en">can enroll in</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#hasCorequisite -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#hasCorequisite"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#hasCorequisite">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:comment xml:lang="en">Course that must be taken simultaneously</rdfs:comment>
+        <rdfs:label xml:lang="en">has corequisite</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#hasIndirectPrerequisite -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#hasIndirectPrerequisite">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
         <owl:propertyChainAxiom rdf:parseType="Collection">
             <rdf:Description rdf:about="http://www.semanticweb.org/university/ontology#hasPrerequisite"/>
             <rdf:Description rdf:about="http://www.semanticweb.org/university/ontology#hasPrerequisite"/>
         </owl:propertyChainAxiom>
+        <rdfs:comment xml:lang="en">Prerequisite of a prerequisite (computed via property chain)</rdfs:comment>
+        <rdfs:label xml:lang="en">has indirect prerequisite</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -98,31 +79,53 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#hasPrerequisite">
         <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:comment xml:lang="en">Direct prerequisite course required before taking this course. Use SPARQL property paths (hasPrerequisite+) for transitive prerequisite queries.</rdfs:comment>
+        <rdfs:label xml:lang="en">has prerequisite</rdfs:label>
     </owl:ObjectProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#hasTaken -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#hasTaken"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#hasTaken">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Student"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:comment xml:lang="en">Course completed by student</rdfs:comment>
+        <rdfs:label xml:lang="en">has taken</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#offeredInSemester -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#offeredInSemester"/>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#requiresLab -->
-
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#requiresLab"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#offeredInSemester">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Semester"/>
+        <rdfs:comment xml:lang="en">Semester when course is offered</rdfs:comment>
+        <rdfs:label xml:lang="en">offered in semester</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#taughtBy -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#taughtBy"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#taughtBy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <rdfs:comment xml:lang="en">Professor teaching this course</rdfs:comment>
+        <rdfs:label xml:lang="en">taught by</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#worksInDepartment -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/university/ontology#worksInDepartment">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/university/ontology#Department"/>
+        <rdfs:comment xml:lang="en">Department where professor works</rdfs:comment>
+        <rdfs:label xml:lang="en">works in department</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
@@ -139,55 +142,102 @@
 
     <!-- http://www.semanticweb.org/university/ontology#courseCode -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#courseCode"/>
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#courseCode">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">Unique course identifier (e.g., CS-301)</rdfs:comment>
+        <rdfs:label xml:lang="en">course code</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#courseName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#courseName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">Full name of the course</rdfs:comment>
+        <rdfs:label xml:lang="en">course name</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#creditHours -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#creditHours"/>
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#creditHours">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment xml:lang="en">Number of credit hours (1-5)</rdfs:comment>
+        <rdfs:label xml:lang="en">credit hours</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#currentEnrollment -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#currentEnrollment"/>
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#currentEnrollment">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment xml:lang="en">Number of students currently enrolled</rdfs:comment>
+        <rdfs:label xml:lang="en">current enrollment</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#departmentName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#departmentName"/>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#hasSchedule -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#hasSchedule"/>
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#departmentName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Department"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">Name of department</rdfs:comment>
+        <rdfs:label xml:lang="en">department name</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#maxCapacity -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#maxCapacity"/>
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#maxCapacity">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+        <rdfs:comment xml:lang="en">Maximum number of students allowed</rdfs:comment>
+        <rdfs:label xml:lang="en">maximum capacity</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#professorName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#professorName"/>
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#professorName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">Full name of professor</rdfs:comment>
+        <rdfs:label xml:lang="en">professor name</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#studentID -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#studentID"/>
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#studentID">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Student"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">Unique student identifier</rdfs:comment>
+        <rdfs:label xml:lang="en">student ID</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#studentName -->
 
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#studentName"/>
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/university/ontology#studentName">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/university/ontology#Student"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment xml:lang="en">Full name of student</rdfs:comment>
+        <rdfs:label xml:lang="en">student name</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
@@ -211,53 +261,41 @@
                     <rdf:Description rdf:about="http://www.semanticweb.org/university/ontology#Course"/>
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/university/ontology#hasPrerequisite"/>
-                        <owl:someValuesFrom>
-                            <owl:Restriction>
-                                <owl:onProperty rdf:resource="http://www.semanticweb.org/university/ontology#hasPrerequisite"/>
-                                <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
-                            </owl:Restriction>
-                        </owl:someValuesFrom>
+                        <owl:minCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minCardinality>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
+        <rdfs:comment xml:lang="en">Course with 2 or more prerequisites (inferred automatically)</rdfs:comment>
+        <rdfs:label xml:lang="en">Advanced Course</rdfs:label>
     </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#Building -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Building"/>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#ClassTime -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#ClassTime"/>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#Course -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Course"/>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#CreditUnit -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#CreditUnit"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Course">
+        <rdfs:comment xml:lang="en">A university course offering</rdfs:comment>
+        <rdfs:label xml:lang="en">Course</rdfs:label>
+    </owl:Class>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#Department -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Department"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Department">
+        <rdfs:comment xml:lang="en">Academic department</rdfs:comment>
+        <rdfs:label xml:lang="en">Department</rdfs:label>
+    </owl:Class>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#FullCourse -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#FullCourse"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#FullCourse">
+        <rdfs:comment xml:lang="en">Course at maximum capacity (inferred by SWRL rule)</rdfs:comment>
+        <rdfs:label xml:lang="en">Full Course</rdfs:label>
+    </owl:Class>
     
 
 
@@ -266,49 +304,36 @@
     <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#GradCourse">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
         <owl:disjointWith rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <rdfs:comment xml:lang="en">Course for graduate students (500+ level)</rdfs:comment>
+        <rdfs:label xml:lang="en">Graduate Course</rdfs:label>
     </owl:Class>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#Lab -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Lab"/>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#Professor -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Professor"/>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#Program -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Program"/>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#Room -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Room"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Professor">
+        <rdfs:comment xml:lang="en">University faculty member</rdfs:comment>
+        <rdfs:label xml:lang="en">Professor</rdfs:label>
+    </owl:Class>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#Semester -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Semester"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Semester">
+        <rdfs:comment xml:lang="en">Academic semester or term</rdfs:comment>
+        <rdfs:label xml:lang="en">Semester</rdfs:label>
+    </owl:Class>
     
 
 
     <!-- http://www.semanticweb.org/university/ontology#Student -->
 
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Student"/>
-    
-
-
-    <!-- http://www.semanticweb.org/university/ontology#Textbook -->
-
-    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Textbook"/>
+    <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#Student">
+        <rdfs:comment xml:lang="en">University student</rdfs:comment>
+        <rdfs:label xml:lang="en">Student</rdfs:label>
+    </owl:Class>
     
 
 
@@ -316,13 +341,9 @@
 
     <owl:Class rdf:about="http://www.semanticweb.org/university/ontology#UndergradCourse">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
+        <rdfs:comment xml:lang="en">Course for undergraduate students (100-400 level)</rdfs:comment>
+        <rdfs:label xml:lang="en">Undergraduate Course</rdfs:label>
     </owl:Class>
-    
-
-
-    <!-- owl:TransitiveProperty -->
-
-    <owl:Class rdf:about="owl:TransitiveProperty"/>
     
 
 
@@ -341,10 +362,14 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CS101">
         <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
-        <courseCode>CS101</courseCode>
-        <creditHours rdf:datatype="xsd:decimal">3</creditHours>
-        <currentEnrollment rdf:datatype="xsd:decimal">50</currentEnrollment>
-        <maxCapacity rdf:datatype="xsd:decimal">50</maxCapacity>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfSmith"/>
+        <courseCode>CS-101</courseCode>
+        <courseName>Introduction to Programming</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</maxCapacity>
+        <rdfs:label xml:lang="en">CS-101</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -353,7 +378,32 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CS201">
         <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
         <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#CS101"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfSmith"/>
+        <courseCode>CS-201</courseCode>
+        <courseName>Data Structures</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</maxCapacity>
+        <rdfs:label xml:lang="en">CS-201</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#CS202 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CS202">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#CS201"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfJohnson"/>
+        <courseCode>CS-202</courseCode>
+        <courseName>Algorithms</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</maxCapacity>
+        <rdfs:label xml:lang="en">CS-202</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -361,8 +411,85 @@
     <!-- http://www.semanticweb.org/university/ontology#CS301 -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CS301">
-        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#GradCourse"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
         <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#CS201"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfMartinez"/>
+        <courseCode>CS-301</courseCode>
+        <courseName>Database Systems</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</maxCapacity>
+        <rdfs:label xml:lang="en">CS-301</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#CS302 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CS302">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#CS201"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfJohnson"/>
+        <courseCode>CS-302</courseCode>
+        <courseName>Operating Systems</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">28</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</maxCapacity>
+        <rdfs:label xml:lang="en">CS-302</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#CS401 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CS401">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#CS202"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#CS301"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfMartinez"/>
+        <courseCode>CS-401</courseCode>
+        <courseName>Artificial Intelligence</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</maxCapacity>
+        <rdfs:label xml:lang="en">CS-401</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#CS402 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CS402">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#CS202"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfMartinez"/>
+        <courseCode>CS-402</courseCode>
+        <courseName>Machine Learning</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</maxCapacity>
+        <rdfs:label xml:lang="en">CS-402</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#CS501 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CS501">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#GradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#CS202"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfJohnson"/>
+        <courseCode>CS-501</courseCode>
+        <courseName>Advanced Algorithms</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</maxCapacity>
+        <rdfs:label xml:lang="en">CS-501</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -371,6 +498,322 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#CSDept">
         <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Department"/>
+        <departmentName>Computer Science</departmentName>
+        <rdfs:label xml:lang="en">CS Department</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ENG201 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ENG201">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#EngineeringDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH201"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#PHYS101"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfWilson"/>
+        <courseCode>ENG-201</courseCode>
+        <courseName>Engineering Mechanics</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">42</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</maxCapacity>
+        <rdfs:label xml:lang="en">ENG-201</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ENG301 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ENG301">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#EngineeringDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH301"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#PHYS201"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfWilson"/>
+        <courseCode>ENG-301</courseCode>
+        <courseName>Thermodynamics</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">38</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</maxCapacity>
+        <rdfs:label xml:lang="en">ENG-301</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ENG401 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ENG401">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#EngineeringDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#ENG201"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH301"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfWilson"/>
+        <courseCode>ENG-401</courseCode>
+        <courseName>Control Systems</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</maxCapacity>
+        <rdfs:label xml:lang="en">ENG-401</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#EngineeringDept -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#EngineeringDept">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Department"/>
+        <departmentName>Engineering</departmentName>
+        <rdfs:label xml:lang="en">Engineering Department</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#MATH101 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#MATH101">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#MathDept"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfWilliams"/>
+        <courseCode>MATH-101</courseCode>
+        <courseName>Calculus I</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">65</maxCapacity>
+        <rdfs:label xml:lang="en">MATH-101</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#MATH201 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#MATH201">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#MathDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH101"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfWilliams"/>
+        <courseCode>MATH-201</courseCode>
+        <courseName>Calculus II</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">55</maxCapacity>
+        <rdfs:label xml:lang="en">MATH-201</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#MATH202 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#MATH202">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#MathDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH101"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfDavis"/>
+        <courseCode>MATH-202</courseCode>
+        <courseName>Linear Algebra</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</maxCapacity>
+        <rdfs:label xml:lang="en">MATH-202</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#MATH301 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#MATH301">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#MathDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH201"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfDavis"/>
+        <courseCode>MATH-301</courseCode>
+        <courseName>Differential Equations</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</maxCapacity>
+        <rdfs:label xml:lang="en">MATH-301</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#MATH302 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#MATH302">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#MathDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH201"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfWilliams"/>
+        <courseCode>MATH-302</courseCode>
+        <courseName>Probability and Statistics</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">40</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">45</maxCapacity>
+        <rdfs:label xml:lang="en">MATH-302</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#MATH401 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#MATH401">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#MathDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH202"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfDavis"/>
+        <courseCode>MATH-401</courseCode>
+        <courseName>Abstract Algebra</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">25</maxCapacity>
+        <rdfs:label xml:lang="en">MATH-401</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#MathDept -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#MathDept">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Department"/>
+        <departmentName>Mathematics</departmentName>
+        <rdfs:label xml:lang="en">Math Department</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#PHYS101 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#PHYS101">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#PhysicsDept"/>
+        <hasCorequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH101"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfBrown"/>
+        <courseCode>PHYS-101</courseCode>
+        <courseName>Physics I: Mechanics</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">55</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</maxCapacity>
+        <rdfs:label xml:lang="en">PHYS-101</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#PHYS201 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#PHYS201">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#PhysicsDept"/>
+        <hasCorequisite rdf:resource="http://www.semanticweb.org/university/ontology#MATH201"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#PHYS101"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfBrown"/>
+        <courseCode>PHYS-201</courseCode>
+        <courseName>Physics II: Electricity and Magnetism</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">48</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">50</maxCapacity>
+        <rdfs:label xml:lang="en">PHYS-201</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#PHYS301 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#PHYS301">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#UndergradCourse"/>
+        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#PhysicsDept"/>
+        <hasPrerequisite rdf:resource="http://www.semanticweb.org/university/ontology#PHYS201"/>
+        <taughtBy rdf:resource="http://www.semanticweb.org/university/ontology#ProfBrown"/>
+        <courseCode>PHYS-301</courseCode>
+        <courseName>Modern Physics</courseName>
+        <creditHours rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</creditHours>
+        <currentEnrollment rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">30</currentEnrollment>
+        <maxCapacity rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">35</maxCapacity>
+        <rdfs:label xml:lang="en">PHYS-301</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#PhysicsDept -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#PhysicsDept">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Department"/>
+        <departmentName>Physics</departmentName>
+        <rdfs:label xml:lang="en">Physics Department</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ProfBrown -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ProfBrown">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <worksInDepartment rdf:resource="http://www.semanticweb.org/university/ontology#PhysicsDept"/>
+        <professorName>Dr. Sarah Brown</professorName>
+        <rdfs:label xml:lang="en">Prof. Brown</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ProfDavis -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ProfDavis">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <worksInDepartment rdf:resource="http://www.semanticweb.org/university/ontology#MathDept"/>
+        <professorName>Dr. Robert Davis</professorName>
+        <rdfs:label xml:lang="en">Prof. Davis</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ProfJohnson -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ProfJohnson">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <worksInDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <professorName>Dr. Emily Johnson</professorName>
+        <rdfs:label xml:lang="en">Prof. Johnson</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ProfMartinez -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ProfMartinez">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <worksInDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <professorName>Dr. Carlos Martinez</professorName>
+        <rdfs:label xml:lang="en">Prof. Martinez</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ProfSmith -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ProfSmith">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <worksInDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
+        <professorName>Dr. John Smith</professorName>
+        <rdfs:label xml:lang="en">Prof. Smith</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ProfWilliams -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ProfWilliams">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <worksInDepartment rdf:resource="http://www.semanticweb.org/university/ontology#MathDept"/>
+        <professorName>Dr. Michael Williams</professorName>
+        <rdfs:label xml:lang="en">Prof. Williams</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/university/ontology#ProfWilson -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#ProfWilson">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Professor"/>
+        <worksInDepartment rdf:resource="http://www.semanticweb.org/university/ontology#EngineeringDept"/>
+        <professorName>Dr. Jennifer Wilson</professorName>
+        <rdfs:label xml:lang="en">Prof. Wilson</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -379,10 +822,13 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#Student001">
         <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Student"/>
-        <belongsToDepartment rdf:resource="http://www.semanticweb.org/university/ontology#CSDept"/>
         <hasTaken rdf:resource="http://www.semanticweb.org/university/ontology#CS101"/>
         <hasTaken rdf:resource="http://www.semanticweb.org/university/ontology#CS201"/>
-        <studentName>Alice</studentName>
+        <hasTaken rdf:resource="http://www.semanticweb.org/university/ontology#MATH101"/>
+        <hasTaken rdf:resource="http://www.semanticweb.org/university/ontology#MATH201"/>
+        <studentID>S001</studentID>
+        <studentName>Alice Johnson</studentName>
+        <rdfs:label xml:lang="en">Alice Johnson</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -392,98 +838,24 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#Student002">
         <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Student"/>
         <hasTaken rdf:resource="http://www.semanticweb.org/university/ontology#CS101"/>
+        <studentID>S002</studentID>
+        <studentName>Bob Smith</studentName>
+        <rdfs:label xml:lang="en">Bob Smith</rdfs:label>
     </owl:NamedIndividual>
     
 
 
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Rules
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
+    <!-- http://www.semanticweb.org/university/ontology#Student003 -->
 
-    <rdf:Description rdf:about="http://www.semanticweb.org/university/ontology#c">
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="http://www.semanticweb.org/university/ontology#p">
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="http://www.semanticweb.org/university/ontology#s">
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
-    </rdf:Description>
-    <rdf:Description>
-        <swrla:isRuleEnabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrla:isRuleEnabled>
-        <rdfs:comment>enrollement</rdfs:comment>
-        <rdfs:label>Rule 1 (enrollment)</rdfs:label>
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Imp"/>
-        <swrl:body>
-            <rdf:Description>
-                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
-                        <swrl:classPredicate rdf:resource="http://www.semanticweb.org/university/ontology#Course"/>
-                        <swrl:argument1 rdf:resource="http://www.semanticweb.org/university/ontology#c"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                        <rdf:first>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/university/ontology#hasPrerequisite"/>
-                                <swrl:argument1 rdf:resource="http://www.semanticweb.org/university/ontology#c"/>
-                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/university/ontology#p"/>
-                            </rdf:Description>
-                        </rdf:first>
-                        <rdf:rest>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                                <rdf:first>
-                                    <rdf:Description>
-                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
-                                        <swrl:classPredicate rdf:resource="http://www.semanticweb.org/university/ontology#Student"/>
-                                        <swrl:argument1 rdf:resource="http://www.semanticweb.org/university/ontology#s"/>
-                                    </rdf:Description>
-                                </rdf:first>
-                                <rdf:rest>
-                                    <rdf:Description>
-                                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                                        <rdf:first>
-                                            <rdf:Description>
-                                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                                <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/university/ontology#hasTaken"/>
-                                                <swrl:argument1 rdf:resource="http://www.semanticweb.org/university/ontology#s"/>
-                                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/university/ontology#p"/>
-                                            </rdf:Description>
-                                        </rdf:first>
-                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                                    </rdf:Description>
-                                </rdf:rest>
-                            </rdf:Description>
-                        </rdf:rest>
-                    </rdf:Description>
-                </rdf:rest>
-            </rdf:Description>
-        </swrl:body>
-        <swrl:head>
-            <rdf:Description>
-                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="http://www.semanticweb.org/university/ontology#canEnrollIn"/>
-                        <swrl:argument1 rdf:resource="http://www.semanticweb.org/university/ontology#s"/>
-                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/university/ontology#c"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-            </rdf:Description>
-        </swrl:head>
-    </rdf:Description>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/university/ontology#Student003">
+        <rdf:type rdf:resource="http://www.semanticweb.org/university/ontology#Student"/>
+        <hasTaken rdf:resource="http://www.semanticweb.org/university/ontology#CS101"/>
+        <hasTaken rdf:resource="http://www.semanticweb.org/university/ontology#CS201"/>
+        <hasTaken rdf:resource="http://www.semanticweb.org/university/ontology#CS202"/>
+        <studentID>S003</studentID>
+        <studentName>Carol Davis</studentName>
+        <rdfs:label xml:lang="en">Carol Davis</rdfs:label>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 

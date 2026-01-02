@@ -1,0 +1,257 @@
+==============================================
+UNIVERSITY COURSES ONTOLOGY - SPARQL QUERIES
+Team: Slim Hassen & Khalifa Abdallah
+==============================================
+
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+==============================================
+QUERY 1: ALL PREREQUISITES FOR A COURSE
+==============================================
+Description: Find all direct and indirect prerequisites for CS-401 (Artificial Intelligence)
+Uses: Property path (+) to traverse transitive hasPrerequisite property
+
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+
+SELECT ?prereqCode ?prereqName
+WHERE {
+    :CS401 :hasPrerequisite+ ?prereq .
+    ?prereq :courseCode ?prereqCode .
+    ?prereq :courseName ?prereqName .
+}
+ORDER BY ?prereqCode
+
+EXPECTED RESULTS:
++--------------+---------------------+
+| prereqCode   | prereqName          |
++--------------+---------------------+
+| CS-101       | Intro to Programming|
+| CS-201       | Data Structures     |
+| CS-202       | Algorithms          |
+| CS-301       | Database Systems    |
++--------------+---------------------+
+
+EXPLANATION: CS-401 requires CS-202 and CS-301 directly. CS-202 requires CS-201, 
+which requires CS-101. Due to transitive property, all are returned.
+
+
+==============================================
+QUERY 2: COURSES TAUGHT BY A PROFESSOR
+==============================================
+Description: Find all courses taught by Dr. John Smith
+Uses: Simple join between Course and Professor
+
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+
+SELECT ?courseCode ?courseName ?credits
+WHERE {
+    ?course :taughtBy :ProfSmith .
+    ?course :courseCode ?courseCode .
+    ?course :courseName ?courseName .
+    ?course :creditHours ?credits .
+}
+ORDER BY ?courseCode
+
+EXPECTED RESULTS:
++-------------+---------------------+---------+
+| courseCode  | courseName          | credits |
++-------------+---------------------+---------+
+| CS-101      | Intro to Programming| 3       |
+| CS-201      | Data Structures     | 4       |
++-------------+---------------------+---------+
+
+EXPLANATION: Prof. Smith teaches 2 courses in the CS department.
+
+
+==============================================
+QUERY 3: COURSES IN DEPARTMENT WITH CREDIT FILTER
+==============================================
+Description: Find all Computer Science courses with more than 3 credit hours
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+
+
+SELECT ?courseCode ?courseName ?credits
+WHERE {
+    ?course :belongsToDepartment :CSDept .
+    ?course :courseCode ?courseCode .
+    ?course :courseName ?courseName .
+    ?course :creditHours ?credits .
+    FILTER (?credits > 3)
+}
+ORDER BY ?courseCode
+
+EXPECTED RESULTS:
++-------------+---------------------+---------+
+| courseCode  | courseName          | credits |
++-------------+---------------------+---------+
+| CS-201      | Data Structures     | 4       |
+| CS-202      | Algorithms          | 4       |
+| CS-302      | Operating Systems   | 4       |
+| CS-402      | Machine Learning    | 4       |
++-------------+---------------------+---------+
+
+EXPLANATION: Only CS courses with 4 credit hours are returned.
+
+
+==============================================
+QUERY 4: COURSES WITHOUT PREREQUISITES
+==============================================
+Description: Find all courses that have no prerequisites (entry-level courses)
+Uses: FILTER NOT EXISTS to find courses with no prerequisites
+
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+
+SELECT ?courseCode ?courseName ?deptName
+WHERE {
+    ?course :courseCode ?courseCode .
+    ?course :courseName ?courseName .
+    ?course :belongsToDepartment ?dept .
+    ?dept :departmentName ?deptName .
+    FILTER NOT EXISTS { ?course :hasPrerequisite ?prereq }
+}
+ORDER BY ?courseCode
+
+EXPECTED RESULTS:
++-------------+---------------------+------------------+
+| courseCode  | courseName          | deptName         |
++-------------+---------------------+------------------+
+| CS-101      | Intro to Programming| Computer Science |
+| MATH-101    | Calculus I          | Mathematics      |
+| PHYS-101    | Physics I: Mechanics| Physics          |
++-------------+---------------------+------------------+
+
+EXPLANATION: These are entry-level courses with no prerequisites, 
+suitable for first-year students.
+
+
+==============================================
+QUERY 5: COUNT COURSES PER DEPARTMENT
+==============================================
+Description: Count how many courses each department offers (workload analysis)
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+
+
+SELECT ?deptName (COUNT(?course) as ?courseCount)
+WHERE {
+    ?course :belongsToDepartment ?dept .
+    ?dept :departmentName ?deptName .
+}
+GROUP BY ?deptName
+ORDER BY DESC(?courseCount)
+
+EXPECTED RESULTS:
++------------------+--------------+
+| deptName         | courseCount  |
++------------------+--------------+
+| Computer Science | 8            |
+| Mathematics      | 6            |
+| Physics          | 3            |
+| Engineering      | 3            |
++------------------+--------------+
+
+EXPLANATION: Computer Science has the most courses (8), followed by 
+Mathematics (6), and Physics/Engineering with 3 each.
+
+
+==============================================
+BONUS QUERY: PROFESSOR WORKLOAD REPORT
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+
+==============================================
+Description: Practical application - show teaching load per professor
+
+SELECT ?profName ?deptName (COUNT(?course) as ?courseCount)
+WHERE {
+    ?prof a :Professor .
+    ?prof :professorName ?profName .
+    ?prof :worksInDepartment ?dept .
+    ?dept :departmentName ?deptName .
+    ?course :taughtBy ?prof .
+}
+GROUP BY ?profName ?deptName
+ORDER BY DESC(?courseCount)
+
+EXPECTED RESULTS:
++---------------------+------------------+--------------+
+| profName            | deptName         | courseCount  |
++---------------------+------------------+--------------+
+| Dr. John Smith      | Computer Science | 2            |
+| Dr. Emily Johnson   | Computer Science | 2            |
+| Dr. Carlos Martinez | Computer Science | 3            |
+| Dr. Michael Williams| Mathematics      | 3            |
+| Dr. Robert Davis    | Mathematics      | 3            |
+| Dr. Sarah Brown     | Physics          | 3            |
+| Dr. Jennifer Wilson | Engineering      | 3            |
++---------------------+------------------+--------------+
+
+EXPLANATION: This shows the teaching workload distribution across faculty.
+Useful for balancing teaching assignments and planning course schedules.
+
+
+==============================================
+BONUS QUERY: FULL COURSES (USING SWRL INFERENCE)
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+
+==============================================
+Description: Find courses at maximum capacity (inferred by SWRL Rule 2)
+Uses: SWRL-inferred class FullCourse
+
+SELECT ?courseCode ?courseName ?current ?max
+WHERE {
+    ?course a :FullCourse .
+    ?course :courseCode ?courseCode .
+    ?course :courseName ?courseName .
+    ?course :currentEnrollment ?current .
+    ?course :maxCapacity ?max .
+}
+ORDER BY ?courseCode
+
+EXPECTED RESULTS (after reasoner runs):
++-------------+---------------------+---------+-----+
+| courseCode  | courseName          | current | max |
++-------------+---------------------+---------+-----+
+| CS-402      | Machine Learning    | 30      | 30  |
++-------------+---------------------+---------+-----+
+
+EXPLANATION: CS-402 is the only course at full capacity. This is inferred
+automatically by the SWRL rule, not explicitly stated in the data.
+
+
+==============================================
+BONUS QUERY: STUDENT ELIGIBILITY (USING SWRL INFERENCE)
+PREFIX : <http://www.semanticweb.org/university/ontology#>
+
+==============================================
+Description: Show which courses Alice can enroll in based on completed prerequisites
+Uses: SWRL-inferred property canEnrollIn
+
+SELECT ?courseCode ?courseName
+WHERE {
+    :Student001 :canEnrollIn ?course .
+    ?course :courseCode ?courseCode .
+    ?course :courseName ?courseName .
+}
+ORDER BY ?courseCode
+
+EXPECTED RESULTS (after reasoner runs):
++-------------+---------------------+
+| courseCode  | courseName          |
++-------------+---------------------+
+| CS-202      | Algorithms          |
+| CS-301      | Database Systems    |
+| CS-302      | Operating Systems   |
+| MATH-301    | Differential Eqns   |
+| MATH-302    | Prob & Statistics   |
++-------------+---------------------+
+
+EXPLANATION: Alice has completed CS-101, CS-201, MATH-101, and MATH-201.
+The SWRL rule infers she can enroll in any course where she has completed
+all prerequisites. This demonstrates practical course recommendation.
+
+
+==============================================
+END OF QUERIES
+==============================================
